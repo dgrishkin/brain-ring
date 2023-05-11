@@ -1,15 +1,15 @@
-import apiRouter from './api';
+import apiRouter from '$api';
 import express from 'express';
 import http from 'http';
 import { AddressInfo } from 'net';
 import WebSocket from 'ws';
-import sqlite3 from 'sqlite3';
-
-const sq = sqlite3.verbose();
+import storage from './storage';
 
 const PORT = 8081;
 
 const app = express();
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
 app.use(apiRouter);
 
 const server = http.createServer(app);
@@ -30,15 +30,9 @@ wss.on('connection', (ws: WebSocket) => {
     ws.send('Hi there, I am a WebSocket server');
 });
 
-const db = new sq.Database('./db/games.db', sq.OPEN_READWRITE | sq.OPEN_CREATE, (err) => {
-    if (err) {
-        console.error(err.message);
-        console.error(err.stack);
-    } else {
-        console.log('Connected to the games database');
-        server.listen(PORT, () => {
-            const addressInfo = server.address() as AddressInfo;
-            console.log(`Server listening on ${addressInfo.address}:${addressInfo.port}`)
-        });
-    }
-});
+storage.authenticate().then(() => storage.sync()).then(() => {
+    server.listen(PORT, () => {
+        const addressInfo = server.address() as AddressInfo;
+        console.log(`Server listening on ${addressInfo.address}:${addressInfo.port}`)
+    });
+}).catch(console.error);
