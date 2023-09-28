@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+    <changeSet  author="dgrishkin"  id="001-create_games_table-1.0">
+        <createSequence  sequenceName="games_game_id_seq" incrementBy="1000"/>
+        <createTable tableName="games">
+            <column  name="game_id"  type="bigint">
+                <constraints  nullable="false"  primaryKey="true"  unique="true"/>
+            </column>
+            <column  name="game_name"  type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_date" type="timestamp with time zone" defaultValue="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_date" type="timestamp with time zone"/>
+        </createTable>
+        <createIndex tableName="games" indexName="nui_games_game_name">
+            <column name="game_name"/>
+        </createIndex>
+        <createIndex tableName="games" indexName="nui_games_start_date_end_date">
+            <column name="start_date"/>
+            <column name="end_date"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,9 @@
+spring:
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+  datasource:
+    platform: postgres
+    driverClassName: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:migrations/changelog.xml

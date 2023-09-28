@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+    <changeSet  author="dgrishkin"  id="002-create_teams_table-1.0">
+        <createSequence  sequenceName="teams_team_id_seq" incrementBy="1000"/>
+        <createTable tableName="teams">
+            <column  name="team_id"  type="bigint">
+                <constraints  nullable="false"  primaryKey="true"  unique="true"/>
+            </column>
+            <column  name="game_id"  type="bigint">
+                <constraints  nullable="false" foreignKeyName="fk_teams_games_game_id" references="games(game_id)"/>
+            </column>
+            <column  name="team_name"  type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="score" type="integer" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="teams" indexName="nui_teams_game_id">
+            <column name="game_id"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>
