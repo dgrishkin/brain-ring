@@ -40,7 +40,7 @@ internal class GameServiceTest @Autowired constructor(private val gameService: G
         val games = gameService.findActiveGames()
         gameService.endGame(games[0].id!!)
         val activeGames = gameService.findActiveGames()
-        assertEquals(0, activeGames.size, "Остались активные игры")
+        assertEquals(0, activeGames.size, "Найдены активные игры")
     }
 
     @Test

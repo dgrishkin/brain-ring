@@ -14,7 +14,7 @@ import java.util.stream.Collectors
 
 @Service
 @Transactional
-open class GameService @Autowired constructor(private val gameRepository: GameRepository) {
+open class GameService @Autowired constructor(private val gameRepository: GameRepository): AbstractDataAccessService<GameDTO>(GameDTO::class) {
 
     open fun findGameById(id: Long): Game {
         return gameRepository.findById(id).orElseThrow { GameRuntimeException("Игра с id = $id не найдена") }
@@ -42,16 +42,9 @@ open class GameService @Autowired constructor(private val gameRepository: GameRe
 
     open fun findActiveGames(): List<GameDTO> =
         gameRepository.findAll { root, _, builder -> builder.isNull(root.get(Game_.endDate)) }
-            .stream()
             .map(this::mapEntityToDTO)
-            .collect(Collectors.toList())
 
     open fun findFinishedGames(): List<GameDTO> =
-        gameRepository.findAll { root, _, builder -> builder.isNotNull(root.get(Game_.endDate)) }
-            .stream()
+        gameRepository.findAll { root, _, builder -> builder.equal(root.get(Game_.gameState), GameState.FINISHED) }
             .map(this::mapEntityToDTO)
-            .collect(Collectors.toList())
-
-    private fun mapEntityToDTO(entity: Game): GameDTO =
-        GameDTO(id = entity.id, gameName = entity.gameName, startDate = entity.startDate, endDate = entity.endDate)
 }
