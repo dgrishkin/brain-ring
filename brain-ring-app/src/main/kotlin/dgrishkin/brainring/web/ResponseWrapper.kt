@@ -20,7 +20,7 @@ class ResponseWrapper : ResponseBodyAdvice<Any> {
         selectedConverterType: Class<out HttpMessageConverter<*>>,
         request: ServerHttpRequest,
         response: ServerHttpResponse
-    ): Any? {
+    ): Any {
         if (body == null) {
             return RestResult<Any>()
         }

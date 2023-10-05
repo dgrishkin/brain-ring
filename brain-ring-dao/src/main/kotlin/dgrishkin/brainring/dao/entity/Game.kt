@@ -1,5 +1,6 @@
 package dgrishkin.brainring.dao.entity
 
+import dgrishkin.brainring.dao.enums.GameState
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -20,6 +21,9 @@ class Game (
 
     @Column(name = "end_date")
     var endDate: LocalDateTime? = null,
+
+    @Column(name = "game_state")
+    var gameState: GameState? = GameState.CREATED,
 
     @OneToMany(mappedBy = "game")
     val teams: List<Team>? = arrayListOf(),

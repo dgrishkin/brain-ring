@@ -2,6 +2,7 @@ package dgrishkin.brainring.service
 
 import dgrishkin.brainring.dao.entity.Game
 import dgrishkin.brainring.dao.entity.Game_
+import dgrishkin.brainring.dao.enums.GameState
 import dgrishkin.brainring.dao.repository.GameRepository
 import dgrishkin.brainring.dto.GameDTO
 import dgrishkin.brainring.exception.GameRuntimeException
@@ -26,9 +27,16 @@ open class GameService @Autowired constructor(private val gameRepository: GameRe
         return mapEntityToDTO(game)
     }
 
+    open fun startGame(id: Long) {
+        val game = findGameById(id)
+        game.gameState = GameState.STARTED
+        gameRepository.save(game)
+    }
+
     open fun endGame(id: Long) {
         val game = findGameById(id)
         game.endDate = LocalDateTime.now()
+        game.gameState = GameState.FINISHED
         gameRepository.save(game)
     }
 

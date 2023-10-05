@@ -24,7 +24,7 @@ open class TeamService @Autowired constructor(
 
     open fun loadTeams(gameId: Long): List<TeamDTO> {
         val game = gameService.findGameById(gameId)
-        return teamRepository.findAll { root, _, builder -> builder.equal(root.get(dgrishkin.brainring.dao.entity.Team_.game), game) }
+        return game.teams!!
             .stream()
             .map(this::mapEntityToDTO)
             .collect(Collectors.toList())
