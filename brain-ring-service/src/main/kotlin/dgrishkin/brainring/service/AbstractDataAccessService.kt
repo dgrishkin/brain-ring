@@ -8,11 +8,11 @@ import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.full.primaryConstructor
 
-abstract class AbstractDataAccessService<D: DTO> protected constructor(private val dtoClass: KClass<D>){
+abstract class AbstractDataAccessService<D: DTO> protected constructor(private val dtoClass: KClass<D>) {
 
     @Suppress("UNCHECKED_CAST")
     protected fun<E: BaseEntity> mapEntityToDTO(entity: E): D {
-        val dtoMemberNames = dtoClass.memberProperties.stream().map { prop -> prop.name }.collect(Collectors.toSet())
+        val dtoMemberNames = dtoClass.memberProperties.map { prop -> prop.name }.toSet()
         val params = entity::class.memberProperties
             .filter{ prop -> dtoMemberNames.contains(prop.name) }
             .associate { it.name to (it as KProperty1<E, Any>).get(entity) }

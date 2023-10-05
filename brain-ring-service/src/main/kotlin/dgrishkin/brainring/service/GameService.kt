@@ -14,7 +14,9 @@ import java.util.stream.Collectors
 
 @Service
 @Transactional
-open class GameService @Autowired constructor(private val gameRepository: GameRepository): AbstractDataAccessService<GameDTO>(GameDTO::class) {
+open class GameService @Autowired constructor(
+    private val gameRepository: GameRepository
+) : AbstractDataAccessService<GameDTO>(GameDTO::class) {
 
     open fun findGameById(id: Long): Game {
         return gameRepository.findById(id).orElseThrow { GameRuntimeException("Игра с id = $id не найдена") }
