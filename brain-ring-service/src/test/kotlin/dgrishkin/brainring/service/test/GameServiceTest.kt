@@ -6,6 +6,7 @@ import dgrishkin.brainring.service.GameService
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.Order
 import org.junit.jupiter.api.TestMethodOrder
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
@@ -18,11 +19,13 @@ import kotlin.test.assertNotNull
 @Import(MainTestConfiguration::class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 internal class GameServiceTest @Autowired constructor(private val gameService: GameService) {
-
+    private val LOG = LoggerFactory.getLogger(this::class.java)
     @Test
     @Order(1)
     fun createGameTest() {
+        LOG.info(">>>Тест создания игры")
         val gameDTO = gameService.createGame("game1")
+        LOG.info(">>>Создана игра: {}", gameDTO)
         assertNotNull(gameDTO.id, "Игра не создана")
         assertState(gameDTO, GameState.CREATED)
     }
@@ -30,13 +33,16 @@ internal class GameServiceTest @Autowired constructor(private val gameService: G
     @Test
     @Order(2)
     fun findActiveGamesTest() {
+        LOG.info(">>>Тест поиска активных игр")
         val games = gameService.findActiveGames()
+        LOG.info(">>>Активные игры: {}", games)
         assertNotEquals(0, games.size, "Нет активных игр")
     }
 
     @Test
     @Order(3)
     fun endGameTest() {
+        LOG.info(">>>Тест завершения игры")
         val games = gameService.findActiveGames()
         gameService.endGame(games[0].id!!)
         val activeGames = gameService.findActiveGames()
@@ -46,13 +52,19 @@ internal class GameServiceTest @Autowired constructor(private val gameService: G
     @Test
     @Order(4)
     fun findFinishedGamesTest() {
+        LOG.info(">>>Тест поиска завершенных игр")
         val games = gameService.findFinishedGames()
+        LOG.info(">>>Завершенные игры: {}", games)
         assertEquals(1, games.size, "Не найдено завершенных игр")
         assertState(games[0], GameState.FINISHED)
     }
 
     private fun assertState(gameDTO: GameDTO, correctState: GameState) {
         val game = gameService.findGameById(gameDTO.id!!)
-        assertEquals(correctState, game.gameState, "Не верное состояние игры. Найдено: ${game.gameState}; Должно быть $correctState")
+        assertEquals(
+            correctState,
+            game.gameState,
+            "Не верное состояние игры. Найдено: ${game.gameState}; Должно быть $correctState"
+        )
     }
 }

@@ -1,6 +1,6 @@
 package dgrishkin.brainring.dto
 
-data class RoundDTO (
-    val id: Long,
+class RoundDTO (
+    id: Long,
     val roundNum: Int,
-)
+) : AbstractDTO(id)

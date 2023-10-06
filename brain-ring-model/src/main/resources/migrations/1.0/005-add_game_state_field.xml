@@ -14,5 +14,8 @@
                 <constraints nullable="false"/>
             </column>
         </addColumn>
+        <createIndex tableName="games" indexName="nui_games_game_state">
+            <column name="game_state"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>

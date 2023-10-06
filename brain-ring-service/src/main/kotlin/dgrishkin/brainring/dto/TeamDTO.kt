@@ -1,7 +1,7 @@
 package dgrishkin.brainring.dto
 
 class TeamDTO (
-    val id: Long?,
+    id: Long?,
     val teamName: String,
     val score: Int?,
-)
+) : AbstractDTO(id)
